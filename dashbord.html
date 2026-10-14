@@ -1,0 +1,283 @@
+\<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rockview Garage - Final</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial}
+body{display:flex;background:#7a8db0;height:100vh;overflow:hidden}
+.sidebar{width:270px;background:#0a1d3a;padding:20px;color:#7aa4d6;display:flex;flex-direction:column;border-radius:0 20px 20px 0}
+.logo{width:44px;height:44px;background:linear-gradient(135deg,#1e4fb0,#00d4ff);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff}
+.m-item{background:#132a4f;padding:13px 16px;border-radius:24px;margin:7px 0;display:flex;gap:10px;cursor:pointer;font-size:14px}
+.m-item.active{background:#1e4fb0;color:#fff;box-shadow:0 6px 16px rgba(30,79,176,.5)}
+.main{flex:1;padding:20px 24px;overflow:auto}
+.white{background:#fff;border-radius:14px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.12);margin:12px 0}
+.stat-row{display:flex;gap:14px;margin:14px 0;flex-wrap:wrap}
+.stat{background:linear-gradient(135deg,#dbe8ff,#f0f6ff);border-left:6px solid #1e73e6;border-radius:12px;padding:16px;flex:1;min-width:150px}
+.stat h1{font-size:28px;color:#0a1d3a}
+.btn-blue{background:#0a53c9;color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn-gold{background:linear-gradient(135deg,#ffcc33,#ffb300);color:#000;border:none;padding:10px 18px;border-radius:10px;font-weight:800;cursor:pointer}
+.btn-green{background:#16a34a;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer}
+.btn-outline{border:1.5px solid #0a53c9;background:#fff;color:#0a53c9;padding:7px 14px;border-radius:8px;font-weight:600;cursor:pointer}
+.badge{padding:5px 12px;border-radius:12px;font-size:12px;font-weight:700;color:#fff}
+.badge-green{background:#16a34a}.badge-yellow{background:#ca8a04}.badge-red{background:#dc2626}.badge-blue{background:#2563eb}
+input,textarea,select{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;margin:6px 0;background:#f8faff}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:11px;color:#64748b;text-align:left;padding:12px 8px;border-bottom:2px solid #e2e8f0;text-transform:uppercase}
+td{padding:12px 8px;border-bottom:1px solid #f1f5f9}
+.hidden{display:none!important}
+.dash-hero{background:linear-gradient(135deg,#0a1d3a,#1e4fb0);color:#fff;border-radius:18px;padding:22px;display:flex;justify-content:space-between;align-items:center}
+.time-box{background:rgba(255,255,255,.12);padding:12px 18px;border-radius:12px;text-align:center}
+.profile-pic{width:90px;height:90px;border-radius:50%;background:#dbe8ff;border:4px solid #1e4fb0;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
+.profile-pic img{width:100%;height:100%;object-fit:cover}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:18px;color:#fff"><div class="logo" id="logoText">BO</div><div><small id="roleSmall">MAIN OWNER</small><br><b id="roleBig">Owner Bob</b></div></div>
+<div id="menuContainer"></div>
+<div style="margin-top:auto"><div class="m-item" onclick="logout()">↪ Logout</div><div style="background:#132a4f;padding:12px;border-radius:14px;margin-top:10px"><b id="userName" style="color:#fff">Bob</b><br><small id="userEmail"></small><br><small id="loginTime" style="color:#4ade80"></small></div></div>
+</div>
+
+<div class="main">
+<div class="dash-hero">
+<div><h1 id="welcomeTitle">Dashboard</h1><p id="welcomeSub" style="opacity:.8">Live</p></div>
+<div class="time-box"><div id="liveTime" style="font-size:22px;font-weight:800">--</div><div id="liveDate" style="font-size:12px;opacity:.8">--</div><div style="margin-top:6px;font-size:11px;background:#00e5ff;color:#000;padding:4px 8px;border-radius:12px">● Live Dashboard</div></div>
+</div>
+
+<!-- TABS -->
+<div id="tab-dashboard"></div>
+
+<div id="tab-vehicles" class="hidden white">
+<h3>🚚 Vehicles — See Only + Problems</h3>
+<div id="vehiclesContent"></div>
+</div>
+
+<div id="tab-addvehicle" class="hidden white">
+<h3>➕ Add Vehicle — Add Fault + Assign to M. Mwansa</h3>
+<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px">
+<div style="flex:1;min-width:280px">
+<label>Vehicle Name *</label><input id="vName" placeholder="e.g. Toyota Hilux">
+<label>Registration No. *</label><input id="vReg" placeholder="e.g. BG-101">
+<label>Year / KM</label><input id="vKm" placeholder="e.g. 2022 • 45,200 km">
+<label>Fault / Problem *</label><textarea id="vFault" placeholder="e.g Engine oil leak, brake failure"></textarea>
+<label>Assign to *</label><select id="vAssign"><option>M. Mwansa</option><option>Bphiri</option><option>Bob</option></select>
+<button class="btn-gold" style="width:100%;margin-top:12px" onclick="addVehicle()">+ ADD VEHICLE & ASSIGN TO M. MWANSA</button>
+<p id="addMsg" style="color:green;font-weight:700;margin-top:8px"></p>
+</div>
+<div style="flex:1;background:#f8faff;padding:14px;border-radius:10px"><b>What happens:</b><br><small>• You add vehicle + fault<br>• It shows in Vehicles tab for all<br>• Assigned to M. Mwansa<br>• Mwansa will add spare parts for it<br>• Bphiri will service it<br>• Pushes to Bphiri automatically</small></div>
+</div>
+</div>
+
+<div id="tab-spare" class="hidden white">
+<h3>📦 Spare Parts — M. Mwansa Adds, Bob & Bphiri See</h3>
+<p style="font-size:13px;color:#64748b">When Main Owner adds new car and pushes to Bphiri, M. Mwansa adds parts here. Shows to Main Owner and Bphiri too.</p>
+<div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap">
+<div style="flex:1;min-width:260px">
+<label>Part Name *</label><input id="partName" placeholder="e.g Brake Pads x2">
+<label>Quantity *</label><input id="partQty" placeholder="e.g 2">
+<label>Cost ZMW *</label><input id="partCost" placeholder="e.g 800">
+<label>For Vehicle Reg *</label><select id="partFor"></select>
+<button class="btn-blue" style="width:100%;margin-top:10px" onclick="addPart()">+ Add Spare Part & Share to Bob & Bphiri</button>
+</div>
+<div style="flex:1.2;min-width:280px;background:#f8faff;padding:12px;border-radius:10px;border:1px solid #e2e8f0">
+<b>All Spare Parts — Visible to Bob, Mwansa, Bphiri</b>
+<div id="partsList" style="margin-top:10px"></div>
+</div>
+</div>
+</div>
+
+<!-- BPHIRI REPORT - EXACTLY LIKE YOUR PHOTO -->
+<div id="tab-report" class="hidden white" style="padding:20px">
+<div style="display:flex;justify-content:space-between"><div><h2 style="font-size:18px;color:#0a1d3a">Reports from B phiri</h2><small style="color:#64748b">B Phiri adds report and pushes to Bob - Bob will see 🔔 in Reports</small></div><div style="text-align:right"><small style="color:#64748b">VEHICLE</small><br><b id="reportHeaderVehicle">BG-101</b></div></div>
+<div style="margin-top:18px">
+<h3 style="font-size:15px">➕ Add Report + Push To Main Owner</h3>
+<label style="font-size:13px;font-weight:700;display:block;margin-top:12px">Vehicle ID</label>
+<select id="reportVehicle"><option value="">Select Vehicle</option></select>
+<label style="font-size:13px;font-weight:700;display:block;margin-top:12px">Report Title / Problem Found</label>
+<input id="reportTitle" placeholder="e.g Engine oil leak, brake failure">
+<label style="font-size:13px;font-weight:700;display:block;margin-top:12px">Report Details</label>
+<textarea id="reportDetails" placeholder="Detailed problem found" style="height:80px"></textarea>
+<label style="font-size:13px;font-weight:700;display:block;margin-top:12px">Parts Used (from Mwansa)</label>
+<select id="reportPartsSelect"></select>
+<input id="reportParts" placeholder="e.g Brake Pads x2, Oil Filter">
+<label style="font-size:13px;font-weight:700;display:block;margin-top:12px">Recommendation</label>
+<input id="reportRecom" placeholder="e.g Replace after 5000km">
+<div style="margin-top:14px;background:#fefce8;border:1px solid #fde68a;padding:10px;border-radius:8px;display:flex;gap:8px;align-items:center">
+<input type="checkbox" id="pushCheck" checked style="width:18px;height:18px"><label for="pushCheck" style="font-size:13px">Push to Main Owner (Bob will see 🔔)</label>
+</div>
+<button class="btn-green" style="margin-top:14px" onclick="addReportExact()">🔔 Add Report And Push To Main Owner</button>
+<p id="reportStatus" style="color:green;font-weight:700;margin-top:8px"></p>
+<div style="margin-top:20px"><h4>📋 My Reports / Reports for Bob</h4><div id="myReports" style="margin-top:8px"></div></div>
+</div>
+</div>
+
+<div id="tab-pickup" class="hidden white">
+<h3>✅ Ready for Pick-up — Add + Push to Messages</h3>
+<div style="display:flex;gap:16px;flex-wrap:wrap">
+<div style="flex:1;min-width:260px">
+<label>Vehicle Reg *</label><select id="pickReg"></select>
+<label>Location *</label><input id="pickLoc" placeholder="e.g Bay 3">
+<label>Note</label><input id="pickNote" placeholder="Cleaned & inspected, key at desk">
+<button class="btn-blue" style="width:100%;margin-top:10px" onclick="addPickup()">+ Add Ready & Push to Messages</button>
+</div>
+<div style="flex:1"><b>Ready Vehicles</b><div id="pickupList" style="margin-top:10px"></div></div>
+</div>
+</div>
+
+<div id="tab-messages" class="hidden white">
+<h3>💬 Messages — Notify Owner via WhatsApp & SMS</h3>
+<div id="messagesList"></div>
+</div>
+
+<div id="tab-profile" class="hidden white">
+<h3>👤 Profile — Add Picture, Login Time</h3>
+<div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:14px">
+<div style="text-align:center"><div class="profile-pic" id="profilePicDiv">👤</div><br><input type="file" id="picInput" accept="image/*" onchange="uploadPic(event)"><br><small>Upload picture</small></div>
+<div style="flex:1;min-width:260px">
+<label>Full Name</label><input id="profName" value="Bob">
+<label>Email</label><input id="profEmail" value="bob.owner@email.com">
+<label>Login Time Today</label><input id="profLogin" readonly>
+<label>Last Login</label><input id="profLast" readonly>
+<label>Role</label><input value="Main Owner" readonly>
+<button class="btn-blue" style="margin-top:10px" onclick="saveProfile()">Save Profile</button>
+</div>
+</div>
+</div>
+
+<div id="tab-settings" class="hidden white">
+<h3>⚙ Setting — Change Password</h3>
+<div style="max-width:400px">
+<label>Current Password</label><input type="password" id="curPass" placeholder="Current">
+<label>New Password</label><input type="password" id="newPass" placeholder="New">
+<label>Confirm New Password</label><input type="password" id="confPass" placeholder="Confirm">
+<button class="btn-blue" style="width:100%;margin-top:10px" onclick="changePass()">Change Password</button>
+<p id="passMsg" style="margin-top:10px;font-weight:700"></p>
+</div>
+</div>
+
+</div>
+
+<script>
+setInterval(()=>{ let d=new Date(); let t=document.getElementById('liveTime'); if(t){ t.innerText=d.toLocaleTimeString(); let dd=document.getElementById('liveDate'); if(dd) dd.innerText=d.toDateString(); } },1000);
+
+function getVehicles(){ try{ return JSON.parse(localStorage.getItem('vehicles')||'null') || [{"name":"Toyota Hilux","reg":"BG-101","km":"2022 • 45,200 km","fault":"Brake check","assign":"M. Mwansa","status":"Active"},{"name":"BMW X5","reg":"BG-102","km":"2023 • 12,300 km","fault":"Engine oil leak","assign":"Bob","status":"Active"},{"name":"Ford Ranger","reg":"BG-103","km":"2021 • 78,900 km","fault":"Hydraulic Leak","assign":"Bphiri","status":"Maintenance"},{"name":"Isuzu D-Max","reg":"BG-104","km":"2020 • 60,000 km","fault":"None","assign":"M. Mwansa","status":"Active"}]; }catch(e){return [];} }
+function getParts(){ try{ return JSON.parse(localStorage.getItem('parts')||'[]'); }catch(e){return [];} }
+function getReports(){ try{ return JSON.parse(localStorage.getItem('reports')||'[]'); }catch(e){return [];} }
+function getPickups(){ try{ return JSON.parse(localStorage.getItem('pickups')||'[]'); }catch(e){return [];} }
+
+let user=localStorage.getItem("user"); if(!user) location.href="login.html";
+let loginNow=new Date().toLocaleString(); localStorage.setItem('lastLogin_'+user,loginNow);
+
+function buildMenu(){
+ let m=document.getElementById('menuContainer'); m.innerHTML='';
+ if(user==="Owner Bob"||user==="Bob"){
+  m.innerHTML=`<div class="m-item active" onclick="switchTab('dashboard',this)">📊 Dashboard</div><div class="m-item" onclick="switchTab('vehicles',this)">🚚 Vehicles</div><div class="m-item" onclick="switchTab('addvehicle',this)">➕ Add Vehicle</div><div class="m-item" onclick="switchTab('report',this)">📊 Reports <span id="notifBob" style="background:red;color:#fff;padding:2px 6px;border-radius:10px;font-size:11px;margin-left:6px;display:none"></span></div><div class="m-item" onclick="switchTab('spare',this)">📦 Spare Parts (View)</div><div class="m-item" onclick="switchTab('profile',this)">👤 Profile</div><div class="m-item" onclick="switchTab('settings',this)">⚙ Setting</div>`;
+  document.getElementById('roleSmall').innerText='MAIN OWNER'; document.getElementById('roleBig').innerText='Owner Bob'; document.getElementById('userName').innerText='Bob'; document.getElementById('userEmail').innerText='bob.owner@email.com'; document.getElementById('logoText').innerText='BO';
+ } else if(user==="M. Mwansa"){
+  m.innerHTML=`<div class="m-item active" onclick="switchTab('dashboard',this)">📊 Dashboard</div><div class="m-item" onclick="switchTab('vehicles',this)">🚚 Vehicles</div><div class="m-item" onclick="switchTab('spare',this)">📦 Spare Parts</div>`;
+  document.getElementById('roleSmall').innerText='OPERATOR'; document.getElementById('roleBig').innerText='M. Mwansa'; document.getElementById('userName').innerText='M. Mwansa'; document.getElementById('userEmail').innerText='mwansa@rockview.edu.zm'; document.getElementById('logoText').innerText='MM';
+ } else {
+  m.innerHTML=`<div class="m-item active" onclick="switchTab('dashboard',this)">📊 Dashboard</div><div class="m-item" onclick="switchTab('vehicles',this)">🚚 Vehicles</div><div class="m-item" onclick="switchTab('pickup',this)">✅ Ready for Pick-up</div><div class="m-item" onclick="switchTab('messages',this)">💬 Messages</div><div class="m-item" onclick="switchTab('report',this)">📄 Reports</div>`;
+  document.getElementById('roleSmall').innerText='SENIOR TECH'; document.getElementById('roleBig').innerText='Bphiri'; document.getElementById('userName').innerText='Bphiri'; document.getElementById('userEmail').innerText='bphiri.tech'; document.getElementById('logoText').innerText='B';
+ }
+ document.getElementById('loginTime').innerText='● Online • '+loginNow;
+ renderAll();
+}
+
+function renderAll(){
+ let v=getVehicles(); let parts=getParts(); let reps=getReports(); let picks=getPickups();
+ // vehicles
+ let html=`<table><tr><th>Vehicle</th><th>Reg</th><th>KM</th><th>Fault/Problem</th><th>Assigned</th><th>Status</th></tr>`; v.forEach(x=>{ html+=`<tr><td><b>${x.name}</b></td><td>${x.reg}</td><td>${x.km}</td><td>${x.fault==='None'?'<span style="color:green">None</span>':`<span class="badge badge-red">${x.fault}</span>`}</td><td>${x.assign}</td><td><span class="badge ${x.status==='Active'?'badge-green':'badge-yellow'}">${x.status}</span></td></tr>`; }); html+=`</table>`;
+ document.getElementById('vehiclesContent').innerHTML=html;
+ // fill dropdowns
+ let sel=document.getElementById('reportVehicle'); sel.innerHTML='<option value="">Select Vehicle</option>'; v.forEach(x=>{ sel.innerHTML+=`<option value="${x.reg}">${x.reg} - ${x.name}</option>`; });
+ let pFor=document.getElementById('partFor'); pFor.innerHTML=''; v.forEach(x=>{ pFor.innerHTML+=`<option value="${x.reg}">${x.reg} - ${x.name}</option>`; });
+ let pickSel=document.getElementById('pickReg'); pickSel.innerHTML=''; v.forEach(x=>{ pickSel.innerHTML+=`<option value="${x.reg}">${x.reg} - ${x.name}</option>`; });
+ let rSel=document.getElementById('reportPartsSelect'); rSel.innerHTML='<option value="">Select from Mwansa parts</option>'; parts.forEach(p=>{ rSel.innerHTML+=`<option value="${p.name}">${p.name} (Qty ${p.qty}) - For ${p.for}</option>`; });
+ // parts list
+ document.getElementById('partsList').innerHTML=parts.map((p,i)=>`<div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between"><div>• <b>${p.name}</b> — Qty: ${p.qty} — ${p.cost} ZMW — For: ${p.for}<br><small style="color:#64748b">Added by ${p.by}</small></div><div><button class="btn-outline" style="font-size:11px" onclick="delPart(${i})">Delete</button></div></div>`).join('') || '<small>No spare parts yet — Mwansa will add after Bob adds vehicle</small>';
+ // reports
+ document.getElementById('myReports').innerHTML=reps.map(r=>`<div style="padding:12px;background:${r.push?'#f0fdf4':'#f8faff'};border-left:4px solid ${r.push?'#16a34a':'#94a3b8'};border-radius:8px;margin:8px 0"><b>${r.vehicle} - ${r.title}</b><br><small>Details: ${r.details}</small><br><small>Parts Used (from Mwansa): ${r.parts}</small><br><small>Recommendation: ${r.recom}</small><br><small style="color:#16a34a">Pushed to Bob: ${r.push?'Yes 🔔':'No'} • ${r.date} • By ${r.by}</small></div>`).join('') || '<small>No reports yet</small>';
+ // pickup
+ document.getElementById('pickupList').innerHTML=picks.map(p=>`<div style="padding:10px;background:#eef4ff;border-radius:8px;margin:8px 0"><b>${p.reg} ready at ${p.loc}</b><br><small>${p.note}</small></div>`).join('') || '<small>No ready vehicles</small>';
+ document.getElementById('messagesList').innerHTML=picks.map(p=>`<div style="padding:14px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;margin:10px 0"><b>${p.reg} is ready for pick-up at ${p.loc}</b><br><small>${p.note}</small><br><br><button style="background:#25D366;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer" onclick="window.open('https://wa.me/?text=${encodeURIComponent(p.reg+' is ready for pick-up at '+p.loc+'. Please collect during business hours.')}')">📱 WhatsApp</button> <button style="background:#0a53c9;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;margin-left:6px" onclick="window.open('sms:?&body=${encodeURIComponent(p.reg+' is ready for pick-up at '+p.loc)}')">💬 SMS</button></div>`).join('') || '<small>No messages — add Ready for Pick-up first</small>';
+ // dashboard creative
+ if(user==="Owner Bob"||user==="Bob"){
+  document.getElementById('tab-dashboard').innerHTML=`<div class="stat-row"><div class="stat" style="background:linear-gradient(135deg,#dbe8ff,#bfdbfe)">🚚 Fleet<div style="font-size:28px;font-weight:800">${v.length}</div><small>Vehicles</small></div><div class="stat" style="background:linear-gradient(135deg,#fef9c3,#fde68a)"><div id="dashTimeBig" style="font-size:22px;font-weight:800">--</div><small>Live Time - Dashboard Design</small></div><div class="stat" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0)">📦 Parts<h1>${parts.length}</h1><small>From Mwansa</small></div><div class="stat" style="background:linear-gradient(135deg,#fee2e2,#fecaca)">📊 Reports<h1>${reps.length}</h1><small>From Bphiri 🔔</small></div></div><div class="white" style="background:linear-gradient(135deg,#ffffff,#f0f7ff);border:2px dashed #1e4fb0"><h3>🎨 Creative Dashboard — Main Owner Bob</h3><p style="margin-top:8px;font-size:13px">This dashboard shows creativeness: live time, gradient stats, fleet overview, and design that proves this is a dashboard. Time updates live.</p><div style="display:flex;gap:10px;margin-top:12px"><div style="background:#0a1d3a;color:#fff;padding:12px;border-radius:12px;flex:1;text-align:center">🚗 ${v.length} Vehicles<br><small>Problems: ${v.filter(x=>x.fault!=='None').length}</small></div><div style="background:#1e4fb0;color:#fff;padding:12px;border-radius:12px;flex:1;text-align:center">👤 Assigned to Mwansa<br><b>${v.filter(x=>x.assign==='M. Mwansa').length}</b></div><div style="background:#00bcd4;color:#000;padding:12px;border-radius:12px;flex:1;text-align:center">⏰ Live<br><small id="dashTimeSmall">--</small></div></div></div>`;
+  setInterval(()=>{ let d=new Date().toLocaleTimeString(); let a=document.getElementById('dashTimeBig'); if(a) a.innerText=d; let b=document.getElementById('dashTimeSmall'); if(b) b.innerText=d; },1000);
+ } else if(user==="M. Mwansa"){
+  document.getElementById('tab-dashboard').innerHTML=`<div class="stat-row"><div class="stat">🚚 Vehicles<h1>${v.length}</h1><small>Read-only</small></div><div class="stat">📦 Your Parts<h1>${parts.filter(p=>p.by==='M. Mwansa').length}</h1><small>Shared to Bob & Bphiri</small></div></div><div class="white"><h3>Dashboard OK</h3><p>Mwansa dashboard — view vehicles only, add spare parts for vehicles Bob added.</p></div>`;
+ } else {
+  document.getElementById('tab-dashboard').innerHTML=`<div class="stat-row"><div class="stat">🔧 Workshop<h1>${v.length}</h1><small>Vehicles</small></div><div class="stat">✅ Ready<h1>${picks.length}</h1><small>For pickup</small></div><div class="stat">📊 Reports<h1>${reps.length}</h1><small>Sent to Bob</small></div></div><div class="white"><h3>Dashboard OK</h3><p>Bphiri dashboard — service vehicles, add ready for pickup, notify via messages, write reports.</p></div>`;
+ }
+ // notif for Bob
+ if((user==="Owner Bob"||user==="Bob") && reps.length>0){ let n=document.getElementById('notifBob'); if(n){ n.style.display='inline-block'; n.innerText='🔔 '+reps.length; } }
+ // profile
+ document.getElementById('profLogin').value=loginNow; document.getElementById('profLast').value=localStorage.getItem('lastLogin_Bob')||loginNow;
+ let pic=localStorage.getItem('profilePic_Bob'); if(pic) document.getElementById('profilePicDiv').innerHTML=`<img src="${pic}">`;
+}
+
+function switchTab(tab,el){
+ document.querySelectorAll('.m-item').forEach(m=>m.classList.remove('active')); if(el) el.classList.add('active');
+ ['dashboard','vehicles','addvehicle','spare','report','pickup','messages','profile','settings'].forEach(t=>{ let s=document.getElementById('tab-'+t); if(s) s.classList.add('hidden'); });
+ document.getElementById('tab-'+tab).classList.remove('hidden');
+}
+
+function addVehicle(){
+ let name=document.getElementById('vName').value.trim();
+ let reg=document.getElementById('vReg').value.trim();
+ let km=document.getElementById('vKm').value.trim()||'2024';
+ let fault=document.getElementById('vFault').value.trim()||'None';
+ let assign=document.getElementById('vAssign').value;
+ if(!name){ alert('Enter Vehicle Name'); return; }
+ if(!reg){ alert('Enter Registration'); return; }
+ let list=getVehicles(); list.push({name,reg,km,fault,assign,status:fault==='None'?'Active':'Maintenance'});
+ localStorage.setItem('vehicles',JSON.stringify(list));
+ document.getElementById('addMsg').innerText='✅ Vehicle '+reg+' Added with fault "'+fault+'" & Assigned to '+assign+' — Pushed to '+assign;
+ document.getElementById('vName').value='';document.getElementById('vReg').value='';document.getElementById('vKm').value='';document.getElementById('vFault').value='';
+ renderAll();
+}
+function addPart(){
+ let name=document.getElementById('partName').value.trim(); let qty=document.getElementById('partQty').value.trim(); let cost=document.getElementById('partCost').value.trim(); let forV=document.getElementById('partFor').value;
+ if(!name){ alert('Enter Part Name'); return; }
+ let list=getParts(); list.push({name,qty:qty||1,cost:cost||0,for:forV||'General',by:user});
+ localStorage.setItem('parts',JSON.stringify(list)); renderAll(); alert('✅ Spare Part Added — Now visible to Main Owner Bob & Bphiri');
+ document.getElementById('partName').value='';document.getElementById('partQty').value='';document.getElementById('partCost').value='';
+}
+function delPart(i){ let l=getParts(); l.splice(i,1); localStorage.setItem('parts',JSON.stringify(l)); renderAll(); }
+function addReportExact(){
+ let vehicle=document.getElementById('reportVehicle').value;
+ let title=document.getElementById('reportTitle').value.trim();
+ let details=document.getElementById('reportDetails').value.trim();
+ let partsSel=document.getElementById('reportPartsSelect').value;
+ let partsMan=document.getElementById('reportParts').value.trim();
+ let parts = (partsSel?partsSel+', ':'') + partsMan || 'None';
+ let recom=document.getElementById('reportRecom').value.trim();
+ let push=document.getElementById('pushCheck').checked;
+ if(!vehicle){ alert('Select Vehicle ID'); return; }
+ if(!title){ alert('Enter Report Title / Problem Found'); return; }
+ if(!details){ alert('Enter Report Details'); return; }
+ let list=getReports(); list.push({vehicle,title,details,parts,recom:recom||'None',push,by:'B. Phiri',date:new Date().toLocaleString()});
+ localStorage.setItem('reports',JSON.stringify(list));
+ document.getElementById('reportStatus').innerText='✅ Report Added and '+(push?'Pushed to Main Owner Bob 🔔':'Saved');
+ document.getElementById('reportTitle').value='';document.getElementById('reportDetails').value='';document.getElementById('reportParts').value='';document.getElementById('reportRecom').value='';
+ document.getElementById('reportHeaderVehicle').innerText=vehicle;
+ renderAll();
+}
+function addPickup(){
+ let reg=document.getElementById('pickReg').value; let loc=document.getElementById('pickLoc').value||'Bay 3'; let note=document.getElementById('pickNote').value||'Ready';
+ if(!reg){ alert('Select Vehicle Reg'); return; }
+ let list=getPickups(); list.push({reg,loc,note}); localStorage.setItem('pickups',JSON.stringify(list)); renderAll(); alert('✅ Ready for Pick-up Added & Pushed to Messages');
+}
+function uploadPic(e){ let file=e.target.files[0]; let reader=new FileReader(); reader.onload=function(ev){ localStorage.setItem('profilePic_Bob',ev.target.result); document.getElementById('profilePicDiv').innerHTML=`<img src="${ev.target.result}">`; }; reader.readAsDataURL(file); }
+function saveProfile(){ localStorage.setItem('profName_Bob',document.getElementById('profName').value); localStorage.setItem('profEmail_Bob',document.getElementById('profEmail').value); alert('Profile Saved!'); }
+function changePass(){ let cur=document.getElementById('curPass').value; let ne=document.getElementById('newPass').value; let co=document.getElementById('confPass').value; if(ne!==co) return document.getElementById('passMsg').innerText='❌ Passwords do not match'; if(ne.length<4) return document.getElementById('passMsg').innerText='❌ Too short'; localStorage.setItem('bobPass',ne); document.getElementById('passMsg').innerText='✅ Password changed! New password: '+ne; }
+function logout(){ localStorage.removeItem('user'); location.href='login.html'; }
+
+buildMenu();
+</script>
+</body>
+</html>
