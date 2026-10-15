@@ -279,5 +279,26 @@ function logout(){ localStorage.removeItem('user'); location.href='login.html'; 
 
 buildMenu();
 </script>
+ 
+ <style>
+@media (max-width:768px){
+ body{flex-direction:column!important}
+ div[style*="280px"],nav,aside{width:100%!important}
+ main{width:100%!important;margin-left:0!important}
+ table{display:block;overflow-x:auto}
+}
+</style>
+<script>
+if(window.innerWidth<=768){
+ const s=document.querySelector('div[style*="280px"]');
+ if(s){s.style.display='none';s.id='mS';
+  const b=document.createElement('div');
+  b.innerHTML='☰ Menu';b.style='background:#0f172a;color:white;padding:12px;font-weight:bold';
+  b.onclick=()=>{const x=document.getElementById('mS');x.style.display=x.style.display=='none'?'block':'none'};
+  document.body.prepend(b);
+ }
+}
+</script>
+
 </body>
 </html>
