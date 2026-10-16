@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rockview Garage - Final</title>
+<title>Rockview Garage</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial}
 body{display:flex;background:#7a8db0;height:100vh;overflow:hidden}
@@ -51,34 +51,32 @@ td{padding:12px 8px;border-bottom:1px solid #f1f5f9}
 <div id="tab-dashboard"></div>
 
 <div id="tab-vehicles" class="hidden white">
-<h3>🚚 Vehicles — See Only + Problems</h3>
+<h3>🚚 Vehicles Overview</h3>
 <div id="vehiclesContent"></div>
 </div>
 
 <div id="tab-addvehicle" class="hidden white">
-<h3>➕ Add Vehicle — Add Fault + Assign to M. Mwansa</h3>
+<h3>➕ Add Vehicle </h3>
 <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px">
 <div style="flex:1;min-width:280px">
 <label>Vehicle Name *</label><input id="vName" placeholder="e.g. Toyota Hilux">
 <label>Registration No. *</label><input id="vReg" placeholder="e.g. BG-101">
+ <label>Phone number</label><input id="vPhone" placeholder="e.g. 0973717395">
 <label>Year / KM</label><input id="vKm" placeholder="e.g. 2022 • 45,200 km">
 <label>Fault / Problem *</label><textarea id="vFault" placeholder="e.g Engine oil leak, brake failure"></textarea>
 <label>Assign to *</label><select id="vAssign"><option>M. Mwansa</option><option>Bphiri</option><option>Bob</option></select>
 <button class="btn-gold" style="width:100%;margin-top:12px" onclick="addVehicle()">+ ADD VEHICLE & ASSIGN TO M. MWANSA</button>
 <p id="addMsg" style="color:green;font-weight:700;margin-top:8px"></p>
 </div>
-<div style="flex:1;background:#f8faff;padding:14px;border-radius:10px"><b>What happens:</b><br><small>• You add vehicle + fault<br>• It shows in Vehicles tab for all<br>• Assigned to M. Mwansa<br>• Mwansa will add spare parts for it<br>• Bphiri will service it<br>• Pushes to Bphiri automatically</small></div>
 </div>
 </div>
 
 <div id="tab-spare" class="hidden white">
-<h3>📦 Spare Parts — M. Mwansa Adds, Bob & Bphiri See</h3>
-<p style="font-size:13px;color:#64748b">When Main Owner adds new car and pushes to Bphiri, M. Mwansa adds parts here. Shows to Main Owner and Bphiri too.</p>
-<div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap">
+<h3>📦 Spare Parts — M. Mwansa Adds</h3>
 <div style="flex:1;min-width:260px">
 <label>Part Name *</label><input id="partName" placeholder="e.g Brake Pads x2">
 <label>Quantity *</label><input id="partQty" placeholder="e.g 2">
-<label>Cost ZMW *</label><input id="partCost" placeholder="e.g 800">
+<label>Cost ZMW *</label><input id="partCost" placeholder="e.g 800k">
 <label>For Vehicle Reg *</label><select id="partFor"></select>
 <button class="btn-blue" style="width:100%;margin-top:10px" onclick="addPart()">+ Add Spare Part & Share to Bob & Bphiri</button>
 </div>
@@ -89,11 +87,11 @@ td{padding:12px 8px;border-bottom:1px solid #f1f5f9}
 </div>
 </div>
 
-<!-- BPHIRI REPORT - EXACTLY LIKE YOUR PHOTO -->
+<!-- BPHIRI REPORT  -->
 <div id="tab-report" class="hidden white" style="padding:20px">
-<div style="display:flex;justify-content:space-between"><div><h2 style="font-size:18px;color:#0a1d3a">Reports from B phiri</h2><small style="color:#64748b">B Phiri adds report and pushes to Bob - Bob will see 🔔 in Reports</small></div><div style="text-align:right"><small style="color:#64748b">VEHICLE</small><br><b id="reportHeaderVehicle">BG-101</b></div></div>
+<div style="display:flex;justify-content:space-between"><div><h2 style="font-size:18px;color:#0a1d3a">Reports from B phiri</h2></div><div style="text-align:right"><small style="color:#64748b">VEHICLE</small><br><b id="reportHeaderVehicle">BG-101</b></div></div>
 <div style="margin-top:18px">
-<h3 style="font-size:15px">➕ Add Report + Push To Main Owner</h3>
+<h3 style="font-size:15px">➕ Add Report</h3>
 <label style="font-size:13px;font-weight:700;display:block;margin-top:12px">Vehicle ID</label>
 <select id="reportVehicle"><option value="">Select Vehicle</option></select>
 <label style="font-size:13px;font-weight:700;display:block;margin-top:12px">Report Title / Problem Found</label>
